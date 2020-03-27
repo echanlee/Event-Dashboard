@@ -1,7 +1,8 @@
 <html>
+<link rel="stylesheet" type="text/css" href="styleSheet.css">
     <div class="topnav">
-        <a class="active" href="#home">Home</a>
-        <a href="#about">Saved</a>
+        <a href="mainDashboard.php">Home</a>
+        <a href="saved.php">Saved</a>
         <div class="search-container">
         <form action="/action_page.php">
             <input type="text" placeholder="Search.." name="search">
@@ -9,6 +10,92 @@
         </form>
         </div>
     </div>
+    <?php
+         session_start();
+         include('./my_connect.php');
+         $mysqli = get_mysqli_conn();   
+         $eventID = $_SESSION['currentEvent'];
+         $clubID = $event = $time = $date = $location = $club = $description = "";
 
-    //use post to get info 
+         showEvent($mysqli, $eventID);
+
+         if(isset($_POST["register"])){
+            registerForEvent($mysqli, $eventID, $_SESSION['stID'], $clubID);
+            sendMail($mysqli, $event, $_SESSION['stID'], $time, $date, $location, $club, $description);
+          }
+
+         function showEvent($mysqli, $eventID) {
+            $sql = "SELECT club_name, club_id, event_name, event_time, event_date, location, description, registration, curr_capacity, max_capacity 
+            FROM events NATURAL JOIN club 
+            WHERE event_ID = ".$eventID;
+   
+           $stmt = $mysqli->prepare($sql);
+   
+           // (5) Execute prepared statement
+           $stmt -> execute();
+   
+           $stmt -> bind_result($club1, $cID, $evt, $time1, $date1, $loc, $descrip, $registration, $curCap, $maxCap);
+           while ($stmt->fetch())
+           {
+           
+           echo "<h1>".$evt."</h1><br>";
+           if($registration == 1) {
+            echo "Capacity: ".$curCap."/".$maxCap;
+            if($curCap < $maxCap) {
+                global $clubID, $event, $time, $date, $location, $club, $description;
+                $clubID = $cID;
+                $event = $evt;
+                $time = $time1; 
+                $date = $date1;
+                $location = $loc;
+                $club = $club1;
+                $description = $descrip;
+
+                echo "<form method = 'post'>
+                <button name = 'register' type = 'submit'>Register</button>
+                </form>";
+            }
+        }
+           echo "Hosted by: ".$club1."<br>";
+           echo "Date: ".$date1."       Time:".$time1."<br>";
+           echo "Location: ".$loc."<br>";
+           echo "Description<br>".$descrip."<br>";
+           
+
+           }
+         }
+
+         function registerForEvent($mysqli, $evtID, $stID, $clubID) {
+            $sql = "INSERT INTO registeredEvent VALUES(".$stID.$evtID.", ".$stID.", ".$clubID.", ".$evtID.")";
+            // Prepared statement, stage 1: prepare
+            $stmt = $mysqli->prepare($sql);
+
+            $stmt -> execute();
+            $message = "Registed!";
+            echo "<script>alert('$message');</script>";
+         }
+
+         function sendMail($mysqli, $event, $studentID, $time, $date, $location, $club, $description) {
+           $sql = "SELECT email FROM users WHERE student_ID = ".$studentID;
+           echo $sql;
+   
+           $stmt = $mysqli->prepare($sql);
+   
+           $stmt -> execute();
+   
+           $stmt -> bind_result($email);
+           while ($stmt->fetch())
+           {
+                $message = "Hello! \r\n\r\nYou have registed for the event ".$event."!\n
+                This event takes place on ".$date." at ".$time.".\r\n
+                Location: ".$location."\r\n
+                Club: ".$club."\r\nDescription \r\n".$description;
+
+               // In case any of our lines are larger than 70 characters, we should use wordwrap()
+               $message = wordwrap($message, 90, "\r\n");
+               mail($email, "You registered for an event!", $message);
+
+           }
+         }
+    ?>   
 </html>

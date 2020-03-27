@@ -17,11 +17,12 @@
     echo "<table>";
     echo "<tr>
             <th>Event ID</th>
+            <th>Event Name</th>
             <th>Date</th>
-            <th>Club</th>
+            <th>Location</th>
             <th>Description</th>
           </tr>";
-    //add while loop 
+    //add while loop check if events are 
 
     echo "</table>";
   ?> 
