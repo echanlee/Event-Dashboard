@@ -34,7 +34,6 @@
    
            $stmt = $mysqli->prepare($sql);
    
-           // (5) Execute prepared statement
            $stmt -> execute();
    
            $stmt -> bind_result($club1, $cID, $evt, $time1, $date1, $loc, $descrip, $registration, $curCap, $maxCap);
@@ -66,14 +65,12 @@
            echo "Date: ".$date1."       Time:".$time1."<br>";
            echo "Location: ".$loc."<br>";
            echo "Description<br>".$descrip."<br>";
-           
-
            }
          }
 
          function registerForEvent($mysqli, $evtID, $stID, $clubID) {
             $sql = "INSERT INTO registeredEvent VALUES(".$stID.$evtID.", ".$stID.", ".$clubID.", ".$evtID.")";
-            // Prepared statement, stage 1: prepare
+
             $stmt = $mysqli->prepare($sql);
 
             $stmt -> execute();
@@ -97,7 +94,6 @@
                 Location: ".$location."\r\n
                 Club: ".$club."\r\nDescription \r\n".$description;
 
-               // In case any of our lines are larger than 70 characters, we should use wordwrap()
                $message = wordwrap($message, 90, "\r\n");
                mail($email, "You registered for an event!", $message);
 

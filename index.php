@@ -20,7 +20,6 @@
 
             $stmt -> bind_param('s', $studentID);
 
-            // (5) Execute prepared statement
             $stmt -> execute();
         
             $stmt -> bind_result($std, $email, $faculty, $education, $password);

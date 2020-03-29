@@ -73,20 +73,14 @@
                 .$_POST[$required[7]].",0, ".$_POST[$required[8]].", ".$_POST[$required[6]].")";
             $stmt = $mysqli->prepare($sql);
             echo $sql;
-            // $stmt->bind_param("sssssssssss",$id, $clubID, $required[0], $required[3], $required[2], 
-            //     $required[4], $required[5], $required[9], $required[7], $required[8], $required[6]);
 
             $stmt->execute();
-
-    
-
         }
 
         function checkClubName($mysqli, $club) {
             $sql = "SELECT club_ID FROM club WHERE club_name = \"".$club."\"";
             $stmt = $mysqli->prepare($sql);
             
-            // (5) Execute prepared statement
             $stmt -> execute();
 
             $stmt -> bind_result($clubID);

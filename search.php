@@ -56,7 +56,6 @@
           ORDER BY event_date, event_time";
         $stmt = $mysqli->prepare($sql);
 
-        // (5) Execute prepared statement
         $stmt -> execute();
         $stmt->store_result();    
         if($stmt->num_rows > 0) {
@@ -90,8 +89,6 @@
           OR internal = 0 
           AND event_date >= CURRENT_DATE) a NATURAL JOIN club c where level_of_education = \"".$edLvl."\" ";
 
-       
-
         if($clubName){
           $sql = $sql. "AND club_name LIKE \"%".$clubName."%\" ";
         }
@@ -113,7 +110,6 @@
 
         $sql = $sql. "ORDER BY event_date, event_time";
         $stmt = $mysqli->prepare($sql);
-
         
         echo "<table>";
         echo "<tr>
@@ -124,7 +120,7 @@
                 <th>Location</th>
                 <th>Description</th>
               </tr>";
-        // (5) Execute prepared statement
+
         $stmt -> execute();
         $stmt->store_result(); 
         if($stmt->num_rows > 0) {
@@ -151,7 +147,7 @@
     
       function saveEvent($mysqli, $stID, $clubID, $evtID) {
           $sql = "INSERT INTO savedEvent VALUES(".$stID.$evtID.", ".$stID.", ".$clubID.", ".$evtID.")";
-          // Prepared statement, stage 1: prepare
+
           $stmt = $mysqli->prepare($sql);
     
           $stmt -> execute();

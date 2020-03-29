@@ -54,7 +54,6 @@
       ORDER BY event_date, event_time";
     $stmt = $mysqli->prepare($sql);
 
-    // (5) Execute prepared statement
     $stmt -> execute();
 
     $stmt -> bind_result($eventID, $clubID, $event, $date, $location, $description);
@@ -75,7 +74,7 @@
 
   function saveEvent($mysqli, $stID, $clubID, $evtID) {
       $sql = "INSERT INTO savedEvent VALUES(".$stID.$evtID.", ".$stID.", ".$clubID.", ".$evtID.")";
-      // Prepared statement, stage 1: prepare
+
       $stmt = $mysqli->prepare($sql);
 
       $stmt -> execute();
@@ -92,7 +91,7 @@
   function checkIfRep($mysqli, $stID) {
     $sql = "SELECT COUNT(*) FROM `clubMembership` WHERE student_ID = ".$stID." AND member_type = \"Club Representative\"";
     $stmt = $mysqli->prepare($sql);
-    // (5) Execute prepared statement
+
     $stmt -> execute();
 
     $stmt -> bind_result($count);

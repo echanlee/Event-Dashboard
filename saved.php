@@ -47,7 +47,6 @@
 
     $stmt = $mysqli->prepare($sql);
 
-    // (5) Execute prepared statement
     $stmt -> execute();
 
     $stmt -> bind_result($eventID, $clubID, $event, $date, $location, $description);
@@ -68,7 +67,7 @@
 
   function unsaveEvent($mysqli, $stID, $evtID) {
     $sql = "DELETE FROM savedEvent WHERE saved_ID = ".$stID.$evtID;
-    // Prepared statement, stage 1: prepare
+    
     $stmt = $mysqli->prepare($sql);
 
     $stmt -> execute();
