@@ -1,10 +1,12 @@
 <html>
 <link rel="stylesheet" type="text/css" href="styleSheet.css">
+<a style = "float:right" href="index.php">Logout</a>
   <div class="topnav">
     <a class="active" href="mainDashboard.php">Home</a>
     <a href="saved.php">Saved</a>
+    <a href="advSearch.php">Advanced Search</a>
     <div class="search-container">
-      <form action="/action_page.php">
+      <form action="search.php" method = "get">
         <input type="text" placeholder="Search.." name="search">
         <button type="submit"><i class="fa fa-search"></i></button>
       </form>
@@ -17,6 +19,11 @@
     include('./my_connect.php');
     $mysqli = get_mysqli_conn();      
 
+    if(checkIfRep($mysqli, $_SESSION['stID']) > 0) {
+      
+      createEventButton();
+    }
+
     displayEvents($mysqli, $_SESSION['stID'], $_SESSION['education']);
 
   if(isset($_POST["save"])){
@@ -24,7 +31,7 @@
     saveEvent($mysqli, $_SESSION['stID'], $cID, $eID);
   }
 
-  if(isset($_POST["event"])){
+  if(isset($_POST["event"])) {
     goToEvent($mysqli, $_POST["event"]);
   }
   function displayEvents($mysqli, $stID, $edLvl) {
@@ -82,6 +89,25 @@
     exit;
   }
 
+  function checkIfRep($mysqli, $stID) {
+    $sql = "SELECT COUNT(*) FROM `clubMembership` WHERE student_ID = ".$stID." AND member_type = \"Club Representative\"";
+    $stmt = $mysqli->prepare($sql);
+    // (5) Execute prepared statement
+    $stmt -> execute();
+
+    $stmt -> bind_result($count);
+
+    while ($stmt->fetch())
+    {
+      return $count;
+    }
+  }
+
+  function createEventButton(){
+      echo "<form action='createEvent.php'>
+        <button type='submit'>Create New Event</button>
+      </form>";
+  }
   ?> 
   </body>
 </html>

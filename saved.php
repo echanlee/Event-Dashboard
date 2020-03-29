@@ -1,10 +1,12 @@
 <html>
 <link rel="stylesheet" type="text/css" href="styleSheet.css">
+<a style = "float:right" href="index.php">Logout</a>
   <div class="topnav">
     <a href="mainDashboard.php">Home</a>
     <a class="active" href="saved.php">Saved</a>
+    <a href="advSearch.php">Advanced Search</a>
     <div class="search-container">
-      <form action="/action_page.php">
+      <form action="search.php" method = "get">
         <input type="text" placeholder="Search.." name="search">
         <button type="submit"><i ></i></button>
       </form>
@@ -14,12 +16,16 @@
   <?php
     session_start();
     include('./my_connect.php');
-    $mysqli = get_mysqli_conn();      
+    $mysqli = get_mysqli_conn();
     displayEvents($mysqli, $_SESSION['stID']);
 
   if(isset($_POST["unsave"])){
     $eID = $_POST["unsave"];
     unsaveEvent($mysqli, $_SESSION['stID'], $eID);
+  }
+
+  if(isset($_POST["event"])){
+    goToEvent($mysqli, $_POST["event"]);
   }
 
   function displayEvents($mysqli, $stID) {
@@ -67,6 +73,12 @@
 
     $stmt -> execute();
     header("Refresh:0");   
+}
+
+function goToEvent($mysqli, $evtID) {
+  $_SESSION['currentEvent'] = $evtID;
+  header("Location: event.php");
+  exit;
 }
   ?> 
   </body>

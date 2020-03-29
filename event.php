@@ -1,10 +1,12 @@
 <html>
 <link rel="stylesheet" type="text/css" href="styleSheet.css">
+    <a style = "float:right" href="index.php">Logout</a>
     <div class="topnav">
         <a href="mainDashboard.php">Home</a>
         <a href="saved.php">Saved</a>
+        <a href="advSearch.php">Advanced Search</a>
         <div class="search-container">
-        <form action="/action_page.php">
+        <form action="search.php" method = "get">
             <input type="text" placeholder="Search.." name="search">
             <button type="submit"><i class="fa fa-search"></i></button>
         </form>
@@ -22,6 +24,7 @@
          if(isset($_POST["register"])){
             registerForEvent($mysqli, $eventID, $_SESSION['stID'], $clubID);
             sendMail($mysqli, $event, $_SESSION['stID'], $time, $date, $location, $club, $description);
+            updateEventCap($mysqli, $eventID);
           }
 
          function showEvent($mysqli, $eventID) {
@@ -54,6 +57,9 @@
                 echo "<form method = 'post'>
                 <button name = 'register' type = 'submit'>Register</button>
                 </form>";
+            }
+            else {
+                echo "EVENT IS FULL";
             }
         }
            echo "Hosted by: ".$club1."<br>";
@@ -96,6 +102,16 @@
                mail($email, "You registered for an event!", $message);
 
            }
+         }
+         function updateEventCap($mysqli, $eventID) {
+             $sql = "UPDATE events 
+             SET curr_capacity = (SELECT COUNT(*) FROM registeredEvent WHERE event_ID = ".$eventID.") 
+             WHERE event_ID = ".$eventID;
+
+             $stmt = $mysqli->prepare($sql);
+
+            $stmt -> execute();
+            header("Refresh:0");  
          }
     ?>   
 </html>
