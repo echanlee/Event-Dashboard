@@ -72,7 +72,6 @@
                 .$_POST[$required[2]]."\", \"".$_POST[$required[4]]."\", \"".$_POST[$required[5]]."\", \"".$_POST[$required[9]]."\", "
                 .$_POST[$required[7]].",0, ".$_POST[$required[8]].", ".$_POST[$required[6]].")";
             $stmt = $mysqli->prepare($sql);
-            echo $sql;
 
             $stmt->execute();
         }

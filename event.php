@@ -80,7 +80,6 @@
 
          function sendMail($mysqli, $event, $studentID, $time, $date, $location, $club, $description) {
            $sql = "SELECT email FROM users WHERE student_ID = ".$studentID;
-           echo $sql;
    
            $stmt = $mysqli->prepare($sql);
    

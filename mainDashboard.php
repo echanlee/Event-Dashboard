@@ -25,6 +25,7 @@
     }
 
     displayEvents($mysqli, $_SESSION['stID'], $_SESSION['education']);
+    emailReminders($mysqli);
 
   if(isset($_POST["save"])){
     list($eID, $cID) = explode("|", $_POST['save']);
@@ -106,6 +107,52 @@
       echo "<form action='createEvent.php'>
         <button type='submit'>Create New Event</button>
       </form>";
+  }
+
+  function emailReminders($mysqli) {
+    $sql = "SELECT u.email, e.event_name, e.event_time, e.location, r.register_ID 
+    FROM registeredEvent r 
+    NATURAL JOIN users u 
+    NATURAL JOIN events e 
+    WHERE event_date = CURDATE() + INTERVAL 1 DAY AND reminderEmail = 0";
+    $stmt = $mysqli->prepare($sql);
+
+    $stmt -> execute();
+
+    $stmt -> bind_result($email, $event, $time, $location, $registerID);
+    $registerIDList;
+    
+    while ($stmt->fetch())
+    {
+      $registerIDList = $registerID.".".$registerIDList; 
+      $message = "Hello! \r\n\r\nYou have registed for the event ".$event." and it is happening tomorrow!\n
+                This event takes place on at ".$time.".\r\n
+                Location: ".$location."\r\n
+                Look forward to seeing you there!";
+      mail($email, "Reminder: You have a registered event tomorrow!", $message);
+    }
+    updateRegisteredEmail($mysqli, $registerIDList);
+  }
+
+  function updateRegisteredEmail($mysqli, $registerIDList) {
+    if(!isset($registerIDList)){
+      exit();
+    }
+    $registerIDs = explode(".", $registerIDList);
+    
+    $sql = "UPDATE registeredEvent SET reminderEmail = 1 WHERE " ;
+
+    for ($x = 0; $x < count($registerIDs)-1; $x++) {
+      if($x == count($registerIDs)-2){
+        $sql = $sql."register_ID = ".$registerIDs[$x];
+      }
+      else {
+        $sql = $sql."register_ID = ".$registerIDs[$x]." OR ";
+      }
+    }
+      $stmt = $mysqli->prepare($sql);
+
+      $stmt -> execute();
   }
   ?> 
   </body>
