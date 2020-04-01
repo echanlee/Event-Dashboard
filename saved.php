@@ -29,6 +29,12 @@
   }
 
   function displayEvents($mysqli, $stID) {
+    $sql = "SELECT event_ID, club_ID, event_name, event_date, location, description 
+    FROM events 
+    WHERE event_ID 
+      in (select event_ID from savedEvent where student_ID = ".$stID.")
+      ORDER BY event_date, event_time";
+
     echo "<table>";
     echo "<tr>
             <th>Unsave</th>
@@ -38,12 +44,6 @@
             <th>Location</th>
             <th>Description</th>
           </tr>";
-
-    $sql = "SELECT event_ID, club_ID, event_name, event_date, location, description 
-      FROM events 
-      WHERE event_ID 
-        in (select event_ID from savedEvent where student_ID = ".$stID.")
-        ORDER BY event_date, event_time";
 
     $stmt = $mysqli->prepare($sql);
 

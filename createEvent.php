@@ -27,13 +27,13 @@
         <label for="lvlEd">Level of Education:</label><br>
         <input type="text" name="lvlEd"><br><br>
         <label for="internal">Internal event only?</label>
-            <select id="internal" name = "internal" value = "1">
-                <option value="1">Yes</option>
+            <select id="internal" name = "internal">
+                <option value="1" selected="selected">Yes</option>
                 <option value="0">No</option>
             </select><br><br>
         <label for="register">Registration Required?</label>
-            <select id="register" name = "register" value = "1">
-                <option value="1">Yes</option>
+            <select id="register" name = "register">
+                <option value="1" selected="selected">Yes</option>
                 <option value="0">No</option>
             </select><br><br>
         <label for="maxcap">Max capacity:</label><br>
@@ -48,7 +48,8 @@
         if(isset($_POST["event"])) {
             $required = array('eventName', 'clubName', 'date', 'time', 'location', 'lvlEd', 'internal', 'register', 'maxcap', 'description');
             foreach($required as $field){
-                if(empty($_POST[$field])) {
+                if(!isset($_POST[$field])) {
+                    echo 'Field '.$field."empty<br>";
                     $error = true;
                   }
                 }
@@ -74,6 +75,7 @@
             $stmt = $mysqli->prepare($sql);
 
             $stmt->execute();
+            echo "Event was created!";
         }
 
         function checkClubName($mysqli, $club) {

@@ -20,12 +20,14 @@
     $mysqli = get_mysqli_conn();      
 
     if(checkIfRep($mysqli, $_SESSION['stID']) > 0) {
-      
       createEventButton();
     }
 
     displayEvents($mysqli, $_SESSION['stID'], $_SESSION['education']);
-    emailReminders($mysqli);
+    $registerIDList = emailReminders($mysqli);
+    if($registerIDList) {
+      updateRegisteredEmail($mysqli, $registerIDList);
+    }
 
   if(isset($_POST["save"])){
     list($eID, $cID) = explode("|", $_POST['save']);
@@ -33,8 +35,10 @@
   }
 
   if(isset($_POST["event"])) {
-    goToEvent($mysqli, $_POST["event"]);
+    $_SESSION['currentEvent'] = $_POST["event"];
+    goToEvent($_POST["event"]);
   }
+
   function displayEvents($mysqli, $stID, $edLvl) {
     echo "<table>";
     echo "<tr>
@@ -83,10 +87,8 @@
       echo "<script>alert('$message');</script>";
   }
 
-  function goToEvent($mysqli, $evtID) {
-    $_SESSION['currentEvent'] = $evtID;
-    header("Location: event.php");
-    exit;
+  function goToEvent($evtID) {
+    echo "<script>window.location.href='event.php';</script>";
   }
 
   function checkIfRep($mysqli, $stID) {
@@ -131,7 +133,7 @@
                 Look forward to seeing you there!";
       mail($email, "Reminder: You have a registered event tomorrow!", $message);
     }
-    updateRegisteredEmail($mysqli, $registerIDList);
+    return $registerIDList;
   }
 
   function updateRegisteredEmail($mysqli, $registerIDList) {

@@ -69,8 +69,7 @@
          }
 
          function registerForEvent($mysqli, $evtID, $stID, $clubID) {
-            $sql = "INSERT INTO registeredEvent VALUES(".$stID.$evtID.", ".$stID.", ".$clubID.", ".$evtID.")";
-
+            $sql = "INSERT INTO registeredEvent VALUES(".$stID.$evtID.", ".$stID.", ".$clubID.", ".$evtID.", 0)";
             $stmt = $mysqli->prepare($sql);
 
             $stmt -> execute();
