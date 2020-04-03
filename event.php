@@ -1,14 +1,134 @@
 <html>
-<link rel="stylesheet" type="text/css" href="styleSheet.css">
-    <a style = "float:right" href="index.php">Logout</a>
+  <head>
+      <style>
+        button {
+          background-color: #ffbb00;
+            border:none;
+            color:#000000;
+            padding: 5px 10px;
+            text-align:center;
+            text-decoration:none;
+            display:block;
+            width:100px;
+            font-size: 16px;
+            margin:4px 2px;
+            cursor: pointer;
+            border-radius:8px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+
+        table{
+          width:90%;
+	  margin-left:auto;
+	  margin-right:auto;
+	  vertical-align: center;
+        	  padding:0px;
+	  font-family: 'Roboto', sans-serif;
+	  font-size: 15;
+	  color: black;
+        }
+	
+	th, td{
+	  padding: 10px;
+	  border-bottom: 1px solid #ddd;
+	}
+
+        .topnav {
+          overflow: hidden;
+          background-color: #000000;
+        }
+
+        
+
+        .topnav a:hover {
+          background-color: #ffbb00;
+          color: black;
+        }
+
+        .topnav a.active {
+          background-color: #ffbb00;
+          color: black;
+        }
+
+        .topnav .search-container {
+          float: right;
+        }
+
+        .topnav input[type=text] {
+          padding: 6px;
+          margin-top: 8px;
+          font-size: 17px;
+          border: none;
+        }
+
+        .topnav .search-container button {
+          float: right;
+          padding: 6px 10px;
+          margin-top: 8px;
+          margin-right: 16px;
+          background: #ddd;
+          font-size: 17px;
+          border: none;
+          cursor: pointer;
+        }
+	.topnav a {
+          font-family: 'Roboto', sans-serif;
+
+          float: left;
+          display: block;
+          color: white;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+          font-size: 17px;
+        }
+
+        .topnav .search-container button:hover {
+          background: #ccc;
+        }
+
+
+	button[type = submit]{
+		font-family: 'Roboto', sans-serif;
+		font-size: 15;
+		color: black;
+		text-decoration: none;
+		margin-left:auto;
+		margin-right:auto;
+	}
+	
+	.button button:hover {
+          background: #ccc;
+        }
+      h1{
+            font-family: 'Roboto', sans-serif;
+            color: black;
+            text-align: center;
+            font-weight: 500;
+            font-size:15px;
+            line-height:15pt;
+        }
+      h2{
+            font-family: 'Roboto', sans-serif;
+            color: black;
+            text-align: center;
+            font-weight: 700;
+            font-size:20px;
+            line-height:30pt;
+        }
+
+      </style>  
+</head>
+
     <div class="topnav">
+    <a style = "float:right" href="index.php">Logout</a>
         <a href="mainDashboard.php">Home</a>
         <a href="saved.php">Saved</a>
         <a href="advSearch.php">Advanced Search</a>
         <div class="search-container">
         <form action="search.php" method = "get">
             <input type="text" placeholder="Search.." name="search">
-            <button type="submit"><i class="fa fa-search"></i></button>
         </form>
         </div>
     </div>
@@ -40,9 +160,9 @@
            while ($stmt->fetch())
            {
            
-           echo "<h1>".$evt."</h1><br>";
+           echo "<h2>".$evt."</h2>";
            if($registration == 1) {
-            echo "Capacity: ".$curCap."/".$maxCap;
+            echo "<h1> Capacity: ".$curCap."/".$maxCap;
             if($curCap < $maxCap) {
                 global $clubID, $event, $time, $date, $location, $club, $description;
                 $clubID = $cID;
@@ -61,10 +181,10 @@
                 echo "EVENT IS FULL";
             }
         }
-           echo "Hosted by: ".$club1."<br>";
-           echo "Date: ".$date1."       Time:".$time1."<br>";
-           echo "Location: ".$loc."<br>";
-           echo "Description<br>".$descrip."<br>";
+           echo "<h1>Hosted by: ".$club1."<br></h1>";
+           echo "<h1>Date: ".$date1."       Time:".$time1."<br></h1>";
+           echo "<h1>Location: ".$loc."<br></h1>";
+           echo "<h1>Description<br>".$descrip."<br></h1>";
            }
          }
 
