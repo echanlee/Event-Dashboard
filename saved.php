@@ -25,7 +25,7 @@
   }
 
   if(isset($_POST["event"])){
-    goToEvent($mysqli, $_POST["event"]);
+    goToEvent($_POST["event"]);
   }
 
   function displayEvents($mysqli, $stID) {
@@ -74,10 +74,8 @@
     header("Refresh:0");   
 }
 
-function goToEvent($mysqli, $evtID) {
-  $_SESSION['currentEvent'] = $evtID;
-  header("Location: event.php");
-  exit;
+function goToEvent($evtID) {
+  echo "<script>window.location.href='event.php';</script>";
 }
   ?> 
   </body>
